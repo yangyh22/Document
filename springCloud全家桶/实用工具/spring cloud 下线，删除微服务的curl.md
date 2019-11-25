@@ -2,7 +2,7 @@
 
  删除 
 
-~~~bash
+```bash
 curl -X DELETE \
   http://192.168.0.143:50000/eureka/apps/GOODSCENTER/192.168.0.143:40001 \
   -H 'Accept: */*' \
@@ -15,7 +15,7 @@ curl -X DELETE \
   -H 'User-Agent: PostmanRuntime/7.15.2' \
   -H 'cache-control: no-cache'
 
-~~~
+```
 
 
 
