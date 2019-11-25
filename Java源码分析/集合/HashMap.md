@@ -20,6 +20,11 @@
 	 * MUST be a power of two <= 1<<30.
 	 */
 	static final int MAXIMUM_CAPACITY = 1 << 30;
+
+	/**
+	 * 桶内数据量超过这个阈值就会将桶内数据结构从链表转为红黑树
+	 */
+    static final int TREEIFY_THRESHOLD = 8;
 	
 	/**
 	 * 负载因子
@@ -66,6 +71,7 @@
                 for (int binCount = 0; ; ++binCount) {
                     if ((e = p.next) == null) {
                         p.next = newNode(hash, key, value, null);
+                        // 判断桶的数量是否达到转换成树形的阀值
                         if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
 						// 数量达到要求，把链表转换为树
                             treeifyBin(tab, hash);
@@ -170,6 +176,31 @@
             }
         }
         return newTab;
+    }
+
+	/**
+	 * 把链表的结果，改成树形结构
+	 */
+    final void treeifyBin(Node<K,V>[] tab, int hash) {
+        int n, index;
+        Node<K,V> e;
+        if (tab == null || (n = tab.length) < MIN_TREEIFY_CAPACITY)
+            resize();
+        else if ((e = tab[index = (n - 1) & hash]) != null) {
+            TreeNode<K,V> hd = null, tl = null;
+            do {
+                TreeNode<K,V> p = replacementTreeNode(e, null);
+                if (tl == null)
+                    hd = p;
+                else {
+                    p.prev = tl;
+                    tl.next = p;
+                }
+                tl = p;
+            } while ((e = e.next) != null);
+            if ((tab[index] = hd) != null)
+                hd.treeify(tab);
+        }
     }
 ```
 
