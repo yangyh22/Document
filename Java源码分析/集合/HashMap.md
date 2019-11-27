@@ -15,6 +15,27 @@
 ```java
     
 	/**
+     * size表示HashMap中存放KV的数量（为链表和树中的KV的总和）。
+     */
+    transient int size;
+
+	/**
+     * capacity译为容量。capacity就是指HashMap中桶的数量。默认值为16。一般第一次扩容时会扩
+     * 容到64，之后好像是2倍。总之，容量都是2的幂。
+     */
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+
+	 /**
+     * 负载因子
+     * loadFactor译为装载因子。装载因子用来衡量HashMap满的程度。loadFactor的默认值为
+     * 0.75f。计算HashMap的实时装载因子的方法为：size/capacity，
+     * 而不是占用桶的数量去除以capacity。
+     *
+     * @serial
+     */
+    final float loadFactor;
+
+	/**
 	 * HashMap 中的数组
 	 */
 	transient Node<K,V>[] table;
@@ -31,7 +52,8 @@
     static final int TREEIFY_THRESHOLD = 8;
 	
 	/**
-	 * 负载因子
+	 * threshold表示当HashMap的size大于threshold时会执行resize操作。 
+	 * threshold=capacity*loadFactor
 	 */
 	int threshold;
 	
