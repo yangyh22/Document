@@ -55,3 +55,15 @@
 1. ArrayList 和Vector他们底层的实现都是一样的，都是使用数组方式存储数据，此数组元素数大于实际存储的数据以便增加和插入元素，它们都允许直接按序号索引元素，但是插入元素要涉及数组元素移动等内存操作，所以索引数据快而插入数据慢。
 2. Vector中的方法由于添加了synchronized修饰，因此Vector是线程安全的容器，但性能上较ArrayList差，因此已经是Java中的遗留容器
 3.  LinkedList使用双向链表实现存储（将内存中零散的内存单元通过附加的引用关联起来，形成一个可以按序号索引的线性结构，这种链式存储方式与数组的连续存储方式相比，内存的利用率更高），按序号索引数据需要进行前向或后向遍历，但是插入数据时只需要记录本项的前后项即可，所以插入速度较快。            
+
+
+
+## CopyOnWriteArrayList、Vector、SynchronizedList
+
+1. 三者都是线程安全的
+2. Vector在所有的方法上加了synchronized关键字
+3. SynchronizedList在大部分方法内部的代码块上加了synchronized，除了读方法，因此读方法要自己加上锁
+4. CopyOnWriteArrayList的写方法通过Arrays.copyOf ()实现，写比较耗性能，相当于实现了读写分离
+5. SynchronizedList在java.util.Collections下，可以实现很多集合的线程安全
+
+结论：写操作比较少的时候推荐CopyOnWriteArrayList。Vector、SynchronizedList性能相差不大
