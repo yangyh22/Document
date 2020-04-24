@@ -6,7 +6,7 @@
 
 2. JDK 1.8 以后 HashMap 数据结构图如下， 当链表节点较少时仍然是以链表存在，当链表节点较多时（大于8）会转为红黑树。 
 
-    ![avatar]( https://raw.githubusercontent.com/yangyh22/Document/master/pic/20180121151050372.png ) 
+    ![](../../pic/20180121151050372.png)
 
    
 
