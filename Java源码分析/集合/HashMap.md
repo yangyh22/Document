@@ -71,7 +71,22 @@
    }
    ```
 
-2. resize()
+2. 指定容量的构造器，初始容量只有16，当数据量大的时候会频繁扩容，消耗性能，最好提前指定容量
+
+   ```java
+   /**
+    * Constructs an empty <tt>HashMap</tt> with the specified initial
+    * capacity and the default load factor (0.75).
+    *
+    * @param  initialCapacity the initial capacity.
+    * @throws IllegalArgumentException if the initial capacity is negative.
+    */
+   public HashMap(int initialCapacity) {
+       this(initialCapacity, DEFAULT_LOAD_FACTOR);
+   }
+   ```
+   
+3. resize()
 
    ```java
    /**
@@ -164,7 +179,7 @@
    }
    ```
 
-2. hash()
+4. hash()
 
    ```java
    static final int hash(Object key) {
@@ -173,7 +188,7 @@
    }
    ```
 
-3. putVal()
+5. putVal()
 
    ```java
    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
@@ -230,6 +245,35 @@
        return null;
    }
    ```
+
+6. get方法，核心
+
+   ```java
+   final Node<K,V> getNode(int hash, Object key) {
+       Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
+       if ((tab = table) != null && (n = tab.length) > 0 &&
+           (first = tab[(n - 1) & hash]) != null) {
+           // 数组不为空，同时能够在数组中找到节点
+           if (first.hash == hash && // always check first node
+               ((k = first.key) == key || (key != null && key.equals(k))))
+               return first;
+           if ((e = first.next) != null) {
+               if (first instanceof TreeNode)
+                   // 树形结构获得数据
+                   return ((TreeNode<K,V>)first).getTreeNode(hash, key);
+               do {
+                   // 链表结构获得数据
+                   if (e.hash == hash &&
+                       ((k = e.key) == key || (key != null && key.equals(k))))
+                       return e;
+               } while ((e = e.next) != null);
+           }
+       }
+       return null;
+   }
+   ```
+
+
 
 
 

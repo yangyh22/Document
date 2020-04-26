@@ -1,10 +1,17 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Test {
 
 
     public static void main(String[] args) {
 
-        int  i =16;
-        System.out.println(i >>> 4);
+        Map<String,String> map = new HashMap<>();
+
+        for (String s : map.keySet()) {
+            System.out.println(s.hashCode());
+        }
+
 
     }
 
