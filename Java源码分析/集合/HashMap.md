@@ -179,7 +179,7 @@
    }
    ```
 
-4. hash()
+4. hash()，length 总是2的n次方时，hash & (length-1)运算等价于对 length 取模，也就是 hash%length，但是&比%具有更高的效率
 
    ```java
    static final int hash(Object key) {
