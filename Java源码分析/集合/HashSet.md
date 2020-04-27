@@ -1,8 +1,64 @@
-## HashSet 源码分析
+# 概览
 
-### 基本情况
+## 重要变量
 
-**HashSet是Set接口的实现类，储存的是无序、唯一的对象**。由于是无序的所以每组数据都没有索引，很多list可用的方法他都没有，凡是需要通过索引来进行操作的方法都没有，所以也不能使用普通for循环来进行遍历，只有加强型for和迭代器两种遍历方法。
+1. 底层实现，主要利用了HashMap的Key，所以叫hashSet
 
-### 数据结构
+   ```java
+   private transient HashMap<E,Object> map;
+   ```
 
+2. 空对象
+
+   ```java
+   // Dummy value to associate with an Object in the backing Map
+   private static final Object PRESENT = new Object();
+   ```
+
+
+
+## 常用方法
+
+1. add
+
+   ```java
+   public boolean add(E e) {
+       // HashMap key不能重复
+       return map.put(e, PRESENT)==null;
+   }
+   ```
+
+2. remove
+
+   ```java
+   public boolean remove(Object o) {
+       // 调用了HashMap的remove方法
+       return map.remove(o)==PRESENT;
+   }
+   ```
+
+3. contains
+
+   ```java
+   public boolean contains(Object o) {
+       // 调用了HashMap的containsKey方法
+       return map.containsKey(o);
+   }
+   ```
+
+4. 构造方法
+
+   ```java
+   public HashSet() {
+       map = new HashMap<>();
+   }
+   ```
+
+5. 构造方法
+
+   ```java
+   public HashSet(int initialCapacity) {
+       // 涉及到HashMap容量问题，数据量很大时，最好初始化容量
+       map = new HashMap<>(initialCapacity);
+   }
+   ```
