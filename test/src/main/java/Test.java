@@ -1,28 +1,42 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Test {
 
+    public static void main(String args[]) throws NoSuchFieldException, IllegalAccessException {
 
-    public static void main(String[] args) throws Exception {
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        //创建一个Callable，3秒后返回String类型
-        Callable<String> myCallable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                Thread.sleep(5000);
-                System.out.println("calld方法执行了");
-                return "call方法返回值";
-            }
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
+                3,
+                0,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<>()
+        );
 
-        };
-        System.out.println("提交任务之前 " + getStringDate());
-        String call = myCallable.call();
-        System.out.println("提交任务之后，获取结果之前 " + getStringDate());
-        System.out.println("获取返回值: " + call);
-        System.out.println("获取到结果之后 " + getStringDate());
-        executor.shutdown();
+
+        for (int i = 1; i <= 4; i++) {
+            int finalI = i;
+            Runnable runnable = () -> {
+                System.out.println("线程" + finalI + "进来了");
+                try {
+                    // 睡眠3秒，模拟线程占用
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("线程" + finalI + "执行完成");
+            };
+            threadPoolExecutor.submit(runnable);
+        }
+        threadPoolExecutor.shutdown();
+        // 线程1进来了
+        // 线程3进来了
+        // 线程3执行完成
+        // 线程1执行完成
+        // 线程2进来了
+        // 线程2执行完成
+
     }
 
 
